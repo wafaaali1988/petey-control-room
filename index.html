@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Petey’s Control Room: Story or Playscript?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Orbitron:wght@700;900&display=swap">
+<style>
+:root{--bg1:#0a1030;--bg2:#1d1259;--cy:#22d3ee;--pu:#a855f7;--pk:#f472b6;--ye:#ffd23f;--gr:#4ade80;--rd:#fb7185;--glass:rgba(12,20,60,.72);--line:rgba(34,211,238,.45);--txt:#f4f8ff;--grid:rgba(34,211,238,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg1:#16215e;--bg2:#3b1d86;--glass:rgba(16,26,80,.78)}}
+:root[data-theme="light"]{--bg1:#16215e;--bg2:#3b1d86;--glass:rgba(16,26,80,.78)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{min-height:100%;margin:0}
+body{background:radial-gradient(900px 500px at 80% -5%,rgba(168,85,247,.35),transparent 60%),radial-gradient(800px 500px at 0% 100%,rgba(34,211,238,.25),transparent 60%),linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;color:var(--txt);font-family:"Fredoka","Trebuchet MS",Arial,sans-serif;overflow-x:hidden}
+.fx{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(ellipse at center,#000 40%,transparent 95%)}
+.gear{position:fixed;z-index:0;opacity:.14;pointer-events:none;animation:spin 40s linear infinite}
+.g1{width:260px;left:-80px;top:12%}.g2{width:190px;right:-50px;bottom:8%;animation-direction:reverse;animation-duration:30s}.g3{width:110px;right:14%;top:5%;animation-duration:22s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.app{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:12px 16px 30px}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.logo{font-family:"Orbitron",Arial,sans-serif;font-weight:900;font-size:clamp(13px,2.6vw,20px);letter-spacing:2px;color:var(--cy);text-shadow:0 0 14px rgba(34,211,238,.8)}
+.hide{display:none!important}
+h1{font-family:"Orbitron",Arial,sans-serif;font-weight:900;font-size:clamp(26px,5.6vw,52px);line-height:1.1;margin:8px 0;text-align:center;background:linear-gradient(90deg,#fff,var(--cy) 50%,var(--pu));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px rgba(34,211,238,.45))}
+.sub{text-align:center;font-size:clamp(17px,2.7vw,23px);margin:0 0 12px;color:#cfe6ff}
+.glass{background:var(--glass);border:2px solid var(--line);border-radius:22px;padding:16px 18px;backdrop-filter:blur(8px);box-shadow:0 0 30px rgba(34,211,238,.18),inset 0 0 28px rgba(34,211,238,.06)}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn{font:inherit;font-weight:700;cursor:pointer;color:#fff;border:2px solid rgba(255,255,255,.55);border-radius:18px;padding:14px 22px;font-size:clamp(18px,3vw,26px);text-shadow:0 2px 0 rgba(0,0,0,.3);box-shadow:0 6px 0 rgba(0,0,0,.4),0 0 22px var(--glow,rgba(34,211,238,.5));transition:transform .08s,box-shadow .08s}
+.btn:hover{filter:brightness(1.1)}.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.4),0 0 14px var(--glow)}
+.b-cy{background:linear-gradient(#5eead4,#0891b2);--glow:rgba(34,211,238,.6)}.b-pu{background:linear-gradient(#c084fc,#6b21a8);--glow:rgba(168,85,247,.6)}.b-pk{background:linear-gradient(#f9a8d4,#be185d);--glow:rgba(244,114,182,.6)}.b-gr{background:linear-gradient(#86efac,#15803d);--glow:rgba(74,222,128,.6)}.b-ye{background:linear-gradient(#ffe57a,#f59e0b);color:#2a1a00;text-shadow:none;--glow:rgba(255,210,63,.6)}
+.btn.sel{outline:4px solid var(--ye);outline-offset:3px}
+.pill{border:2px solid var(--line);border-radius:999px;padding:5px 14px;font-weight:700;font-size:clamp(14px,2.3vw,19px);background:rgba(10,16,48,.7)}
+.pill.on{background:var(--ye);color:#2a1a00;border-color:#fff}
+.hero{position:relative;width:clamp(150px,30vw,250px);margin:0 auto}
+.hero::after{content:"";position:absolute;left:8%;right:8%;bottom:-6px;height:26px;border-radius:50%;background:radial-gradient(closest-side,rgba(34,211,238,.9),transparent);filter:blur(4px)}
+.petey{width:100%;display:block;animation:fl 3.2s ease-in-out infinite;filter:drop-shadow(0 10px 18px rgba(0,0,0,.45))}
+.petey.hop{animation:hop .7s}
+@keyframes fl{50%{transform:translateY(-9px)}}@keyframes hop{30%{transform:translateY(-26px) rotate(-6deg)}65%{transform:translateY(0) rotate(5deg)}}
+.ant{animation:blink 1.4s infinite}@keyframes blink{50%{opacity:.25}}
+.core{animation:pulse 1.8s ease-in-out infinite;transform-origin:200px 396px}@keyframes pulse{50%{transform:scale(1.18)}}
+.petey[data-m="happy"] .eN,.petey[data-m="oops"] .eN,.petey[data-m="happy"] .eO,.petey[data-m="norm"] .eH,.petey[data-m="norm"] .eO,.petey[data-m="oops"] .eH{display:none}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.chip{border-radius:16px;padding:10px 14px;font-size:clamp(15px,2.4vw,20px);border:2px solid}
+.chip b{display:block;font-family:"Orbitron",Arial,sans-serif;font-size:.8em;letter-spacing:1px;margin-bottom:4px}
+.c-s{border-color:#60a5fa;background:rgba(37,99,235,.25)}.c-p{border-color:#c084fc;background:rgba(126,34,206,.28)}
+@media(max-width:600px){.chips{grid-template-columns:1fr}}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.bat{display:flex;gap:3px;padding:6px;border:2px solid var(--line);border-radius:10px;background:rgba(10,16,48,.7);margin-bottom:12px;position:relative}
+.bat::after{content:"";position:absolute;right:-8px;top:30%;width:6px;height:40%;border-radius:0 4px 4px 0;background:var(--line)}
+.bat i{flex:1;height:16px;border-radius:3px;background:rgba(255,255,255,.1);transition:.3s}
+.bat i.on{background:linear-gradient(var(--gr),#16a34a);box-shadow:0 0 10px var(--gr)}.bat i.off{background:rgba(251,113,133,.55)}
+.stage{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:start}
+.stage .hero{width:min(100%,185px)}
+@media(max-width:720px){.stage{grid-template-columns:1fr}.stage .hero{width:130px}}
+.say{position:relative;background:#fff;color:#14123a;border-radius:16px;padding:8px 12px;font-weight:700;text-align:center;margin-top:16px;font-size:clamp(15px,2.4vw,19px)}
+.say::before{content:"";position:absolute;top:-9px;left:50%;margin-left:-9px;border:9px solid transparent;border-top:0;border-bottom-color:#fff}
+.screen{position:relative;overflow:hidden;border-radius:20px;border:3px solid var(--cy);background:linear-gradient(160deg,#0b1a52,#111040);box-shadow:0 0 30px rgba(34,211,238,.4),inset 0 0 40px rgba(34,211,238,.15)}
+.screen .bar{display:flex;justify-content:space-between;padding:7px 14px;font-family:"Orbitron",Arial,sans-serif;font-size:clamp(11px,1.9vw,14px);letter-spacing:1.5px;color:var(--cy);background:rgba(34,211,238,.12);border-bottom:2px solid rgba(34,211,238,.4)}
+.screen .bar b{color:var(--gr);animation:blink 1s infinite}
+.scan{position:absolute;left:0;right:0;height:60px;top:-60px;background:linear-gradient(transparent,rgba(34,211,238,.22),transparent);animation:sc 3.4s linear infinite}
+@keyframes sc{to{top:110%}}
+.txt{position:relative;padding:22px 24px;min-height:150px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;font-size:clamp(21px,4.2vw,34px);line-height:1.4;white-space:pre-line;color:#fff;text-shadow:0 0 12px rgba(125,211,252,.5);animation:in .45s}
+@keyframes in{from{opacity:0;filter:blur(8px);transform:scale(.97)}}
+.choices{margin-top:16px}
+.opts{display:grid;gap:10px;width:100%}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;white-space:pre-line;font-size:clamp(17px,2.9vw,24px);width:100%;padding:12px 16px}
+.opt i{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#fff;color:#14123a;font-style:normal;font-family:"Orbitron",Arial,sans-serif;font-size:18px}
+.fb{margin-top:14px;border-radius:18px;padding:12px 16px;font-size:clamp(17px,2.8vw,23px);font-weight:700;text-align:center;border:2px solid #fff;animation:in .3s}
+.fb.ok{background:linear-gradient(#16a34a,#166534);box-shadow:0 0 24px rgba(74,222,128,.55)}.fb.no{background:linear-gradient(#e11d48,#7f1d1d);box-shadow:0 0 24px rgba(251,113,133,.5)}
+.fb small{font-weight:500;font-size:.85em;display:block;margin-top:4px}.fb .btn{margin-top:10px}
+details{margin-top:14px}summary{cursor:pointer;font-weight:700;text-align:center;font-size:clamp(15px,2.4vw,19px);color:var(--cy)}
+.big{font-size:clamp(46px,10vw,84px);text-align:center;margin:0}
+.stk{font-size:clamp(28px,6vw,42px);text-align:center;word-break:break-all;margin:8px 0;letter-spacing:3px}
+.cf{position:fixed;top:-20px;width:12px;height:18px;border-radius:3px;z-index:9;pointer-events:none;animation:fall 1.8s linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+@media(prefers-reduced-motion:reduce){.gear,.petey,.ant,.core,.scan,.cf{animation:none}}
+</style>
+</head>
+<body>
+<div class="fx"></div>
+<svg class="gear g1" viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="none" stroke="#22d3ee" stroke-width="12" stroke-dasharray="9 7"/><circle cx="50" cy="50" r="30" fill="none" stroke="#22d3ee" stroke-width="5"/><circle cx="50" cy="50" r="10" fill="#22d3ee"/></svg>
+<svg class="gear g2" viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="none" stroke="#a855f7" stroke-width="12" stroke-dasharray="9 7"/><circle cx="50" cy="50" r="30" fill="none" stroke="#a855f7" stroke-width="5"/><circle cx="50" cy="50" r="10" fill="#a855f7"/></svg>
+<svg class="gear g3" viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="none" stroke="#ffd23f" stroke-width="12" stroke-dasharray="9 7"/><circle cx="50" cy="50" r="30" fill="none" stroke="#ffd23f" stroke-width="5"/></svg>
+
+<main class="app">
+<div class="hud"><span class="logo">⚙ PETEY’S CONTROL ROOM</span><button class="btn b-ye" style="padding:4px 12px;font-size:18px" id="mu" onclick="toggleSound()">🔊</button></div>
+
+<template id="petey">
+<div class="hero"><svg class="petey" data-m="norm" viewBox="0 0 400 490" aria-label="Petey the robot">
+<defs><linearGradient id="sv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#cfd6e4"/><stop offset="1" stop-color="#8f9ab0"/></linearGradient><linearGradient id="cy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a5f3fc"/><stop offset="1" stop-color="#0891b2"/></linearGradient><radialGradient id="or"><stop offset="0" stop-color="#fde68a"/><stop offset="1" stop-color="#f97316"/></radialGradient><linearGradient id="vz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2a6b"/><stop offset="1" stop-color="#060b26"/></linearGradient><filter id="gl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect x="194" y="34" width="12" height="44" fill="#9ca3af"/><circle class="ant" cx="200" cy="26" r="17" fill="url(#or)"/>
+<circle cx="56" cy="190" r="36" fill="url(#cy)" stroke="#0e7490" stroke-width="3"/><circle cx="344" cy="190" r="36" fill="url(#cy)" stroke="#0e7490" stroke-width="3"/>
+<rect x="62" y="70" width="276" height="230" rx="92" fill="url(#sv)" stroke="#7b869c" stroke-width="4"/>
+<rect x="86" y="102" width="228" height="156" rx="66" fill="url(#vz)" stroke="#22d3ee" stroke-width="3"/>
+<g class="eN" filter="url(#gl)" stroke="#22d3ee" fill="none" stroke-linecap="round"><path d="M128 190Q154 156 180 190M220 190Q246 156 272 190" stroke-width="15"/><path d="M168 226Q200 252 232 226" stroke-width="8"/></g>
+<g class="eH" filter="url(#gl)" stroke="#4ade80" fill="none" stroke-linecap="round"><path d="M124 196Q154 144 184 196M216 196Q246 144 276 196" stroke-width="16"/><path d="M160 222Q200 270 240 222Z" stroke-width="8" fill="#4ade80"/></g>
+<g class="eO" filter="url(#gl)" stroke="#fb7185" fill="none" stroke-linecap="round"><path d="M132 176L176 196M268 176L224 196" stroke-width="14"/><path d="M168 240Q200 222 232 240" stroke-width="8"/></g>
+<ellipse cx="146" cy="120" rx="48" ry="9" fill="#fff" opacity=".14"/>
+<rect x="170" y="298" width="60" height="24" fill="#9ca3af"/>
+<rect x="46" y="338" width="44" height="116" rx="22" fill="url(#sv)" stroke="#7b869c" stroke-width="3" transform="rotate(14 68 340)"/><circle cx="60" cy="458" r="22" fill="url(#cy)"/>
+<rect x="310" y="300" width="44" height="116" rx="22" fill="url(#sv)" stroke="#7b869c" stroke-width="3" transform="rotate(-38 332 400)"/><circle cx="376" cy="316" r="21" fill="url(#cy)"/>
+<rect x="108" y="320" width="184" height="165" rx="60" fill="url(#sv)" stroke="#7b869c" stroke-width="4"/>
+<g class="core"><circle cx="200" cy="396" r="36" fill="url(#cy)" filter="url(#gl)"/><circle cx="200" cy="396" r="15" fill="#fff"/></g>
+</svg></div>
+</template>
+
+<section id="start">
+  <h1>STORY or PLAYSCRIPT?</h1>
+  <p class="sub">Mission: help Petey sort 25 texts and charge his battery! 🔋</p>
+  <div class="pe"></div>
+  <div class="glass" style="margin-top:20px">
+    <p class="sub" style="margin-top:0">Who is playing?</p>
+    <div class="row">
+      <button class="btn b-cy sel" id="m1" onclick="pickMode(1)">🙋 Everyone together</button>
+      <button class="btn b-pu" id="m2" onclick="pickMode(2)">⭐ Stars vs 🤖 Robots</button>
+    </div>
+    <div class="row" style="margin-top:18px"><button class="btn b-gr" onclick="startGame()">▶ START MISSION</button></div>
+  </div>
+  <div class="chips"><div class="chip c-s"><b>📖 STORY</b>Paragraphs · a narrator · events, settings and feelings</div><div class="chip c-p"><b>🎭 PLAYSCRIPT</b>Characters’ names · dialogue · stage directions in brackets</div></div>
+</section>
+
+<section id="intro" class="hide">
+  <div class="glass" style="text-align:center">
+    <p class="logo" id="in1" style="font-size:clamp(14px,3vw,22px)"></p>
+    <h1 id="in2" style="font-size:clamp(24px,5vw,42px)"></h1>
+    <p class="sub" id="in3"></p>
+    <button class="btn b-gr" onclick="beginRound()">▶ GO!</button>
+  </div>
+</section>
+
+<section id="play" class="hide">
+  <div class="top"><span class="pill" id="rd"></span><span class="pill" id="sc"></span><span class="pill" id="pw">⚡ 0%</span></div>
+  <div class="bat" id="bat"></div>
+  <div id="pt" class="row" style="margin-bottom:10px"></div>
+  <div class="stage">
+    <div><div class="pe2"></div><div class="say" id="say"></div></div>
+    <div>
+      <div class="screen"><div class="bar"><span id="tag"></span><b>● LIVE</b></div><div class="scan"></div><div class="txt" id="card"></div></div>
+      <div class="row choices" id="ch"></div>
+      <div class="fb hide" id="fb"></div>
+      <details><summary>🔑 Need a clue?</summary><div class="chips"><div class="chip c-s"><b>📖 STORY</b>Paragraphs · a narrator · events, settings, feelings</div><div class="chip c-p"><b>🎭 PLAYSCRIPT</b>Names · dialogue · stage directions in (brackets)</div></div></details>
+    </div>
+  </div>
+</section>
+
+<section id="end" class="hide">
+  <h1>MISSION COMPLETE!</h1>
+  <p class="big" id="stars"></p>
+  <div class="glass"><p class="sub" id="res" style="margin:0"></p><p class="sub" id="rank" style="margin:6px 0;color:#ffd23f"></p><div class="stk" id="stk"></div></div>
+  <div class="row" style="margin-top:16px"><button class="btn b-gr" onclick="startGame()">🔁 Play again</button><button class="btn b-pu" onclick="show('start')">🏠 Home</button></div>
+</section>
+</main>
+
+<script>
+var R1=[
+{t:"Sophie asked Petey for help. Petey agreed happily.",a:"s",w:"It is written in a paragraph and a narrator tells us what happened."},
+{t:"Sophie: Can you help me, Petey?\nPetey: Of course!",a:"p",w:"It has the characters’ names and their spoken words (dialogue)."},
+{t:"Petey made a strange noise. Sophie was puzzled and looked inside his front panel.",a:"s",w:"A narrator describes the events in a paragraph."},
+{t:"Petey: (sneezes) Achoo!\nSophie: What was that?\n(Petey makes a strange noise.)",a:"p",w:"Names, dialogue and stage directions in brackets. It is written to be performed."},
+{t:"Sophie opened Petey’s front panel. She was surprised to find a tangled knot inside.",a:"s",w:"A narrator tells us the events and Sophie’s feelings. No names come before the words."},
+{t:"Sophie: (opens the front panel) Oh no! There is a knot!\nPetey: (looks worried) Can you fix it?",a:"p",w:"The brackets tell the actors what to do and how to feel."},
+{t:"Petey felt happy because he could help his friend. He smiled all the way home.",a:"s",w:"A narrator describes feelings and events in paragraphs."},
+{t:"Petey: (nods happily) I will help you, Sophie.",a:"p",w:"Character name + stage direction in brackets + dialogue."},
+{t:"The sun was shining in the garden. Sophie and Petey sat under the big tree.",a:"s",w:"It describes the setting in a paragraph."},
+{t:"Sophie: Look at the knot!\nPetey: (blinks his lights) It is very tangled.",a:"p",w:"It is a dialogue between characters, with a stage direction."}];
+var R2=[
+{t:"Sophie:",a:"n",w:"A character’s name tells us who is speaking."},
+{t:"Can you help me, Petey?",a:"d",w:"These are the words a character says out loud: dialogue."},
+{t:"(Petey nods happily.)",a:"s",w:"It is in brackets and tells us what the character does."},
+{t:"Petey:",a:"n",w:"The name comes first, then a colon. It shows who is speaking."},
+{t:"(sneezes)",a:"s",w:"Brackets show an action: it is a stage direction."},
+{t:"Of course!",a:"d",w:"It is what Petey says: dialogue."},
+{t:"(Sophie looks inside Petey’s front panel.)",a:"s",w:"It tells us what Sophie does, so it is a stage direction."},
+{t:"What was that?",a:"d",w:"It is spoken by a character: dialogue."}];
+var R3=[
+{t:"Sophie asked Petey for help. Petey agreed happily.",o:[
+ {x:"Sophie: Can you help me, Petey?\nPetey: (nods happily) Of course!",ok:1,w:"It has names, dialogue and a stage direction."},
+ {x:"Sophie asked Petey, “Can you help me?” Petey agreed.",w:"This is still a story. It is a paragraph with a narrator."},
+ {x:"Sophie and Petey talked about help.",w:"This tells what happened. It is not dialogue."}]},
+{t:"Petey made a strange noise. Sophie was puzzled.",o:[
+ {x:"Petey made a strange noise and Sophie was puzzled.",w:"This is still a story paragraph."},
+ {x:"(Petey makes a strange noise.)\nSophie: (puzzled) What was that?",ok:1,w:"The action is in brackets and Sophie speaks with her name first."},
+ {x:"What was that? Strange noise!",w:"There are no names and no brackets."}]},
+{t:"Sophie opened Petey’s front panel. She was surprised to find a tangled knot inside.",o:[
+ {x:"Sophie opened the panel and was surprised.",w:"This is a story sentence with a narrator."},
+ {x:"Oh! A tangled knot inside!",w:"We do not know who is speaking and what she does."},
+ {x:"Sophie: (opens the front panel) Oh! A tangled knot!",ok:1,w:"Name + stage direction + dialogue."}]},
+{t:"Petey felt worried. He asked Sophie to fix the knot.",o:[
+ {x:"Can you fix the knot, Sophie?",w:"The name and the stage direction are missing."},
+ {x:"Petey: (looks worried) Can you fix the knot, Sophie?",ok:1,w:"The feeling is in brackets and Petey’s words come after his name."},
+ {x:"Petey felt worried and asked Sophie for help.",w:"This is a story, not a playscript."}]},
+{t:"Sophie smiled and thanked Petey.",o:[
+ {x:"(Thank you, Petey!)\nSophie smiles.",w:"Spoken words are not in brackets. Actions are."},
+ {x:"Sophie smiled. She said thank you.",w:"This is a story paragraph."},
+ {x:"Sophie: (smiles) Thank you, Petey!",ok:1,w:"Name + stage direction in brackets + dialogue."}]},
+{t:"Petey’s lights blinked. Sophie laughed.",o:[
+ {x:"Petey’s lights blinked and Sophie laughed out loud.",w:"This is a story sentence."},
+ {x:"Sophie: laughed\nPetey: lights blinked",w:"Actions should go in brackets, not after the names."},
+ {x:"(Petey’s lights blink.)\nSophie: (laughs) Ha ha!",ok:1,w:"Brackets show the actions and Sophie’s words are dialogue."}]},
+{t:"Petey walked slowly to the door. Sophie followed him.",o:[
+ {x:"(Petey walks slowly to the door. Sophie follows him.)\nSophie: Wait for me, Petey!",ok:1,w:"The actions are in brackets and Sophie speaks."},
+ {x:"Petey: walks slowly to the door.",w:"An action is not something Petey says. Put it in brackets."},
+ {x:"Petey walked slowly. Sophie followed him to the door.",w:"This is a story paragraph."}]}];
+var CH1=[{k:"s",l:"📖 Story",c:"b-cy"},{k:"p",l:"🎭 Playscript",c:"b-pu"}];
+var CH2=[{k:"n",l:"🏷️ Character name",c:"b-pk"},{k:"d",l:"💬 Dialogue",c:"b-cy"},{k:"s",l:"🎬 Stage direction",c:"b-pu"}];
+var RD=[{n:"MISSION 1",t:"Story or Playscript?",d:"Read the text. Is it a story or a playscript? (10 questions)",say:"Is this a story or a playscript?",tag:"SCANNING TEXT…",it:R1,ch:CH1},
+{n:"MISSION 2",t:"What is it?",d:"Find the part of the playscript: name, dialogue or stage direction. (8 questions)",say:"What part of a playscript is this?",tag:"SCANNING LINE…",it:R2,ch:CH2},
+{n:"MISSION 3",t:"Turn it into a playscript",d:"Read the story. Choose the correct playscript version. (7 questions)",say:"Which one is the playscript?",tag:"STORY TEXT",it:R3}];
+var OKS=["Brilliant!","Great job!","You got it!","Super!","Fantastic!"],NOS=["Nice try!","Let’s recharge and check the clues!","Almost!","Good thinking, look again!"];
+var TN=["⭐ Team Stars","🤖 Team Robots"],S={},mode=1,snd=true,ac=null,TOTAL=25;
+function $(i){return document.getElementById(i)}
+function show(i){["start","intro","play","end"].forEach(function(x){$(x).classList.toggle("hide",x!==i)})}
+function pickMode(m){mode=m;$("m1").classList.toggle("sel",m==1);$("m2").classList.toggle("sel",m==2)}
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function pet(x){return $("petey").innerHTML.replace(/id="(\w+)"/g,'id="$1'+x+'"').replace(/url\(#(\w+)\)/g,'url(#$1'+x+')')}
+document.querySelector(".pe").innerHTML=pet("a");document.querySelector(".pe2").innerHTML=pet("b");
+function toggleSound(){snd=!snd;$("mu").textContent=snd?"🔊":"🔇"}
+function beep(f,d,t){if(!snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();var o=ac.createOscillator(),g=ac.createGain();o.type=t||"sine";o.frequency.value=f;g.gain.value=.12;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.stop(ac.currentTime+d)}catch(e){}}
+function confetti(){var c=["#ffd23f","#22d3ee","#f472b6","#a855f7","#4ade80"];for(var i=0;i<28;i++){var d=document.createElement("i");d.className="cf";d.style.left=Math.random()*100+"vw";d.style.background=c[i%5];d.style.animationDelay=Math.random()*.4+"s";document.body.appendChild(d);setTimeout(function(x){x.remove()}.bind(null,d),2400)}}
+function mood(m){var p=document.querySelector("#play .petey");if(p){p.setAttribute("data-m",m)}}
+function startGame(){
+  S={r:0,i:0,items:[],sc:[0,0],turn:0,st:0,ok:0,tot:0,lock:false,stk:"",res:[]};
+  $("bat").innerHTML=new Array(TOTAL+1).join("<i></i>");
+  intro();
+}
+function intro(){var r=RD[S.r];S.items=shuf(r.it);S.i=0;$("in1").textContent=r.n;$("in2").textContent=r.t;$("in3").textContent=r.d;show("intro")}
+function beginRound(){show("play");render()}
+function render(){
+  var r=RD[S.r],it=S.items[S.i];S.lock=false;mood("norm");
+  $("rd").textContent=r.n+" · "+(S.i+1)+"/"+S.items.length;$("tag").textContent=r.tag;$("say").textContent=r.say;
+  $("pw").textContent="⚡ "+Math.round(S.ok/TOTAL*100)+"%";
+  var h="";if(mode==2)h=TN.map(function(n,k){return '<span class="pill'+(S.turn==k?' on':'')+'">'+n+': '+S.sc[k]+'</span>'}).join("");
+  $("pt").innerHTML=h;$("sc").textContent=mode==1?"⭐ "+S.sc[0]+(S.st>=3?"  🔥 "+S.st:""):(S.turn==0?"Team Stars’ turn!":"Team Robots’ turn!");
+  var c=$("card");c.style.animation="none";void c.offsetWidth;c.style.animation="";
+  c.textContent=S.r==2?"📖  "+it.t:it.t;
+  if(S.r==2){S.opts=shuf(it.o);$("ch").innerHTML='<div class="opts">'+S.opts.map(function(o,k){return '<button class="btn b-pu opt" onclick="answer('+k+')"><i>'+"ABC"[k]+'</i><span>'+o.x+'</span></button>'}).join("")+'</div>'}
+  else $("ch").innerHTML=r.ch.map(function(b){return '<button class="btn '+b.c+'" onclick="answer(\''+b.k+'\')">'+b.l+'</button>'}).join("");
+  $("fb").classList.add("hide");
+}
+function label(a){return {s:"Story",p:"Playscript",n:"Character name",d:"Dialogue"}[a]||"Stage direction"}
+function answer(k){
+  if(S.lock)return;S.lock=true;var it=S.items[S.i],good,why,p=document.querySelector("#play .petey");S.tot++;
+  if(S.r==2){var o=S.opts[k];good=!!o.ok;why=good?o.w:o.w+" The correct one: “"+it.o.filter(function(z){return z.ok})[0].x.replace(/\n/g," ")+"”"}
+  else{good=k==it.a;why=good?it.w:"Answer: "+label(it.a)+". "+it.w}
+  var f=$("fb");f.classList.remove("hide","ok","no");var cells=$("bat").children;
+  if(good){S.ok++;S.st++;var pts=10+(S.st>=3?5:0);S.sc[mode==2?S.turn:0]+=pts;S.stk+=["📖","🎭","⭐","🌟","🏅"][S.ok%5];
+    cells[S.tot-1].className="on";f.classList.add("ok");f.innerHTML="⚡ "+OKS[Math.floor(Math.random()*OKS.length)]+" +"+pts+"<small>"+why+"</small>";mood("happy");beep(660,.15);setTimeout(function(){beep(880,.2)},140);confetti()}
+  else{S.st=0;cells[S.tot-1].className="off";f.classList.add("no");f.innerHTML="🔋 "+NOS[Math.floor(Math.random()*NOS.length)]+"<small>"+why+"</small>";mood("oops");beep(220,.3,"triangle")}
+  f.innerHTML+='<button class="btn b-ye" onclick="next()">Next ➜</button>';
+  $("say").textContent=good?"Yes! Well spotted!":"Let’s learn from it!";
+  $("ch").innerHTML="";p.classList.remove("hop");void p.getBoundingClientRect();p.classList.add("hop");
+  $("pw").textContent="⚡ "+Math.round(S.ok/TOTAL*100)+"%";
+}
+function next(){
+  S.i++;if(mode==2)S.turn=1-S.turn;
+  if(S.i>=S.items.length){S.r++;if(S.r>=RD.length){finish()}else intro();return}
+  render();
+}
+function finish(){
+  show("end");var pc=S.ok/S.tot,st=pc>=.85?"⭐⭐⭐":pc>=.6?"⭐⭐":"⭐";$("stars").textContent=st;
+  var r="You got "+S.ok+" out of "+S.tot+" right!";
+  if(mode==2){var a=S.sc[0],b=S.sc[1];r=TN[0]+": "+a+"  |  "+TN[1]+": "+b+(a==b?" — It’s a draw!":" — "+TN[a>b?0:1]+" win!")}
+  else r+="  Score: "+S.sc[0];
+  $("res").textContent=r;$("rank").textContent=pc>=.85?"🤖 Rank: Robot Master":pc>=.6?"🔧 Rank: Robot Helper":"⚙️ Rank: Robot Trainee — try again!";
+  $("stk").textContent=S.stk||"🎯";confetti();beep(523,.15);setTimeout(function(){beep(659,.15)},160);setTimeout(function(){beep(784,.3)},320);
+}
+</script>
+</body>
+</html>
